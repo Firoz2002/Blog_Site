@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title> Explore | Blog-Site</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+
+    <style>
+        body {
+            background: #f3f3f3;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        header {
+            height: 50px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        main {
+            padding-left: 5%;
+            padding-right: 5%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        footer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        img {
+            width: 292px;
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+            font-size: x-large;
+        }
+
+        button {
+            float: right;
+            width: 80px;
+            margin-left: 15px;
+            margin-right: 15px;
+            padding: 10px;
+            color: white;
+            cursor: pointer;
+            border-radius: 10px;
+            border: none;
+            background-color:black;
+        }
+
+        a:hover {
+            color: rgb(13, 94, 186);
+        }
+
+        .tags a {
+            font-size: medium;
+            padding: 5px;
+            margin-right: 10px; 
+            color: rgb(13, 94, 186);
+            border-radius: 5px;
+        }
+
+        .blogpost {
+            margin: 25px;
+            width: 292px;
+            background-color: white;
+            border: 0.1px solid rgb(212, 212, 212);
+        }
+
+        .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo img {
+            float: left;
+            margin-left: 20px;
+            height: 52px;
+            width: 52px;
+        }
+
+        .logo h2 {
+            float: left;
+            margin-left: 20px;
+            color: #1C768F;
+            cursor: pointer;
+        }
+
+        .description {
+            margin: 20px
+        }
+
+        .btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .newsLetter {
+            padding: 30px;
+            font-size: large;
+            color: white;
+            margin: 10px;
+            width: 500px;
+            background-color: #FA991C;
+        }
+
+        .newsLetter  input {
+            height: 30px;
+        }
+
+        .redirect {
+            font-size: medium;
+            color: #0099ff;   
+        }
+
+        #addBtn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: xx-large;
+            margin: 2rem;
+            width: 50px;
+            height: 50px;
+            position: fixed; 
+            background-color: #0099ff;; 
+            color: white; 
+            padding: 10px; 
+            border: 0; 
+            outline: 0; 
+            border-radius: 50%;
+            right: 0;
+            bottom: 0; 
+        }
+
+        #myPopup {
+            width: 100px;
+            margin: 10px;
+            position: fixed;
+            bottom: 5rem;
+            right: 0;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            z-index: 1;
+            padding: 8px 0;
+            visibility: hidden;
+        }
+
+        .show {
+            visibility: visible;
+            -webkit-animation: fadeIn 1s;
+            animation: fadeIn 1s;
+        }
+
+        @-webkit-keyframes fadeIn {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+
+        @keyframes fadeIn {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+
+        @media(min-width: 300px) and (max-width: 500px) {
+            .logo h2 {
+                font-size: medium;
+                float: left;
+                margin-left: 10px;
+                color: #1C768F;
+                cursor: pointer;
+            }
+
+            .logo img {
+                float: left;
+                margin-left: 10px;
+                height: 32px;
+                width: 32px;
+            }
+
+            button {
+                font-size: x-small;
+                width: 60px;
+                margin-left: 5px;
+                margin-right: 5px;
+                padding: 10px;
+                border-radius: 8%;
+            }
+
+            .newsLetter input {
+                margin-top: 10px;
+            }
+        }
+
+        @media (min-width: 700px) and (max-width: 800px) {
+            main {
+                padding-left: 0%;
+                padding-right: 0%;
+            }
+        }
+
+    </style>
+
+    <body>
+        <div id="wrapper">
+
+            <header>
+                <div class="logo">
+                    <img src="/assets/logo.png" alt="">
+                    <h2>Travel & Blogs</h2>
+                </div>
+                <div class="btn">
+                    <button class="login">Log-In</button> 
+                    <button class="register">Register</button>
+                </div>
+            </header>
+            <hr>
+            <main>
+
+            </main>
+            <hr>
+            <h5 style="color: red; text-align: center">Under Construction</h5>
+            <footer>
+                <div class="newsLetter">
+                    <h2>JOIN <br> NEWSLETTER</h2>
+                    <p>Discover the best kept travel secrets and explore the world in a new and exciting way when you subscribe to our Monthly Newsletter!</p>
+                    <div class="user-info">
+                        <input type="text" placeholder="Name">
+                        <input type="email" placeholder="Email">
+                        <button> Send </button>
+                    </div>
+                </div>
+                <div>
+                    <span class="popuptext" id="myPopup">Please Login</span>
+                    <button id="addBtn" style="visibility: visible;"> + </button>
+                </div>  
+            </footer>
+        </div>
+
+        <script>
+            const main = document.querySelector('main');
+            const addBtn = document.querySelector('#addBtn');
+            const popup = document.querySelector('.popuptext');
+            const loginBtn = document.querySelector('.login');
+            const registerBtn = document.querySelector('.register');
+
+            document.addEventListener('DOMContentLoaded', async () => {
+                try {
+                    fetch('/islogged', {
+                        method: "GET",
+                        headers: {
+                            'Content-Type': 'application/json'        
+                        },
+                        body: JSON.stringify() 
+                    })
+                    .then(res => res.json())
+                    .then((data) => {
+                        if(data.islogged) {
+                            registerBtn.style.visibility = 'hidden';
+                            loginBtn.style.visibility = 'hidden';
+                            addBtn.onclick = () => { location.href = '/publish'}
+                        } else {
+                            addBtn.addEventListener('click', async () => {
+                            popup.style.visibility = 'visible';
+                            })
+                        }
+                    }
+                    )
+                } catch (error) {
+                    
+                }
+                
+            })
+
+            document.addEventListener('DOMContentLoaded', async () => {
+                try {
+                    const res = await fetch('/getBlogs', {
+                        method: "GET",
+                        headers: {
+                            'Content-Type': 'application/json'        
+                        },
+                        body: JSON.stringify()
+                    });
+
+                    const data = await res.json();
+                    
+                    data.forEach(elem => {
+                        setupBlogs(elem);
+                    });
+
+                } catch (error) {
+                    console.log(error)
+                }
+            })
+
+            const setupBlogs = (data) => {
+                const blog = document.createElement('div');
+                blog.classList.add('blogpost');
+
+                blog.innerHTML = `
+                    <div class="image">
+                        <img src="${data.bannerImage}" alt="Image-1">
+                    </div>
+                    <div class="description"> 
+                        <div class="title">
+                            <a href="/blog/${data.title}"><p>${data.title.replaceAll('-', ' ')}</p></a>
+                            <p>${data.content}</p>
+                        </div>
+                        <hr>
+                        <a href="/blog/${data.title}" class="redirect">Continue Reading<a>
+                    </div>
+                `
+
+                main.appendChild(blog);  
+            }
+
+            document.querySelector('.register').onclick = function() {
+                location.href = '/register';
+            };
+
+            document.querySelector('.login').onclick = function() {
+                location.href = '/login';
+            }
+            
+        </script>
+    </body>
+</html>

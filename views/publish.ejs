@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tiny.cloud/1/1wd2pemr0xkfvc8k8yrujwt1i9w13wr1h7j2rxomjodomecq/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+    <title>Document</title>
+</head>
+
+<style>
+    body {
+            background-color: #f5f5f5;
+            font-family: Arial, Helvetica, sans-serif;
+    }
+
+    #wrapper {
+            margin: 0 5% 5% 5%/*0 18% 0 18%*/;
+    }
+
+    .container {
+            font-size: larger;
+            background-color: white;
+            outline: 0.1px solid rgb(212, 212, 212);
+            outline-offset: -20px;
+            padding: 5% 10% 5% 10%;
+        }
+
+    .container textarea {
+        width: 60vw;
+        border-radius: 5px;
+        font-size: larger;
+        padding: 15px;
+        margin-bottom: 10px;
+        border: 0.1px solid rgb(212, 212, 212);
+        resize: none;
+    }
+
+    .banner {
+        width: 100%;
+        min-height: 200px;
+        margin-bottom: 10px;
+        position: relative;
+        background: #e7e7e7;
+        background-size: cover;
+        background-position: center; 
+    }
+
+    .banner-upload-btn {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .banner-upload-btn img {
+        width: 20px;
+    }
+
+    .blog-options {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 60px;
+        background: #ffff;
+        z-index: 9;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .btn {
+        border: none;
+        outline: none;
+        cursor: pointer;
+    }
+
+    .btn.grey {
+        background: #a5a5a5;
+        color: #fff;
+        margin-left: 20px;
+        font-size: 14px;
+    }
+
+    .btn.dark{
+        background: #1b1b1b;
+        color: #fff;
+    }
+
+    .btn {
+        float: right;
+        margin-left: 15px;
+        margin-right: 15px;
+        padding: 10px;
+        color: white;
+        cursor: pointer;
+        border-radius: 10px;
+        border: none;
+        background-color: #032539;
+    }
+
+</style>
+
+<body>
+    <div id="wrapper">
+            
+        <div class="container">
+
+         <h1><u>Create Blog</u></h1>
+
+             <div class="banner">
+                 <input type="file" accept="image/*" id="banner-upload" hidden>
+                 <label for="banner-upload" class="banner-upload-btn"><img src="assets/upload.png" alt="upload banner"></label>
+             </div>
+
+             
+            <textarea name="title" class="title" placeholder="Title goes here"></textarea>
+             
+             <textarea name="content" class="content" placeholder="Write down your thoughts...."></textarea>
+
+             <div class="blog-options">
+                 <button class="btn dark publish-btn">Publish</button>
+                 <input type="file" accept="image/*" id="image-upload" name="image" hidden>
+                 <label for="image-upload" class="btn grey upload-btn">Upload Image</label>
+             </div>
+             
+         </div>
+     </div>
+    <script>
+        tinymce.init({
+            selector: '.content',
+            plugins: 'charmap codesample emoticons image lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage advtemplate ai mentions tinycomments tableofcontents footnotes mergetags autocorrect typography inlinecss markdown',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough |  image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+            tinycomments_mode: 'embedded',
+            tinycomments_author: 'Author name',
+            mergetags_list: [
+            { value: 'First.Name', title: 'First Name' },
+            { value: 'Email', title: 'Email' },
+            ],
+            ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
+            automatic_uploads: false,
+            images_upload_url: '/uploads'
+        });
+    </script>
+
+    <script>
+        const blogTitle = document.querySelector('.title');
+        const blogContent = document.querySelector('.content');
+        const bannerImage = document.querySelector('#banner-upload');
+        const banner = document.querySelector('.banner');
+        let bannerPath;
+
+        const publishBtn = document.querySelector('.publish-btn');
+        const uploadInput = document.querySelector('#image-upload');
+
+        bannerImage.addEventListener('change', () => {
+            uploadImage(bannerImage, "banner");
+        })
+
+        uploadInput.addEventListener('change', () => {
+            uploadImage(uploadInput, "image");
+        })
+
+        const uploadImage = (uploadFile, uploadType) => {
+            const [file] = uploadFile.files;
+            if(file && file.type.includes("image")) {
+                const formdata = new FormData();
+                formdata.append('image', file);
+
+                fetch('/upload', {
+                    method: 'Post',
+                    body: formdata
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if(uploadType=="image") {
+                        addImage(data, file.name);
+                    } else {
+                        bannerPath = `${data}`;
+                        banner.style.backgroundImage = `url("${data}")`;
+                    }
+                    })
+                } else {
+                    alert("Image only");
+                } 
+            }
+
+            const addImage = (imagepath, alt) => {
+                let textToInsert = `<img src="${imagepath}" alt="${alt}" class=''image>`;
+                tinymce.activeEditor.execCommand('mceInsertContent', false, textToInsert);
+            }
+
+            publishBtn.addEventListener('click', () => {
+                if(blogTitle.value.length) {
+                    let title = blogTitle.value.split(" ").join("-");
+                    let content = tinymce.activeEditor.getContent('.content');
+                    let docName = `${title}`
+                    fetch('/publish', {
+                        method: "POST",
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            title: title,
+                            content: content,
+                            bannerImage: bannerPath,
+                        })
+                    })
+                    .then(() => {
+                        location.href = `blog/${docName}`;
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                    })
+                }
+            })
+            
+    </script>
+</body>
+</html>
