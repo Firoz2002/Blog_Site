@@ -112,7 +112,7 @@
 
         <script>
             const blogId = decodeURI(location.pathname.split('/').pop());
-            const url = (document.URL).replace("http://localhost:3000/blog/", "");
+            const url = (document.URL).replace("https://blog-site-k38f.onrender.com/blog/", "");
             document.addEventListener('DOMContentLoaded', async () => {
                 try {
                     const res = await fetch(`/getBlog/blog?title=${url}`, {
