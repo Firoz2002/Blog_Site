@@ -7,7 +7,7 @@ const jwtSecret = process.env.SECRET;
 
 const register = async (req, res, next) => {
     const { username, password, email } = req.body;
-    
+    console.log(username + password);
     try {
         
         if(password.length < 6) {
@@ -116,6 +116,10 @@ const islogged = async (req, res, next) => {
                     islogged: false
                 })
             }
+        } else {
+            return res.status(400).json({
+                islogged: false
+            })
         }
     } catch (error) {
         throw {error}
