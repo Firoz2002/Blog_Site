@@ -40,6 +40,7 @@ const getBlog = async (req, res, next) => {
 
 const getBlogs = async (req, res, next) => {
     var arr = []
+
     try {
         var blogs = await Blog.find().sort({$natural: -1}).limit(9);
         

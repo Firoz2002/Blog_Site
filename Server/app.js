@@ -6,19 +6,20 @@ const cookieParser = require('cookie-parser');
 
 const connect = require('./config/database');
 
-require('dotenv').config();
 const app = express();
-const PORT = process.env.PORT
+require('dotenv').config();
+const PORT = process.env.PORT || 3000;
 
 app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, '../Client/views'));
 
 app.use(cors());
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(require('./route/route'));
+app.use(express.static(path.join(__dirname, '../Client/public')));
 
-app.use(express.static(path.join(__dirname ,'public')));
+app.use(require('./route/route'));
 
 app.get('/', (req, res) => { res.render('home') });
 app.get('/register', (req, res) => { res.render('register') });

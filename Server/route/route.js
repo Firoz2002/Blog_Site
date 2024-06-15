@@ -4,6 +4,7 @@ const express = require('express');
 const { storage } = require('../config/storage');
 const { createBlog, getBlogs, getBlog } = require('../controllers/blog-controller');
 const { register, login, islogged} = require('../controllers/auth-controller');
+const { createComment, getComments } = require('../controllers/comment-controller');
 
 const upload = multer({ storage });
 const router = express.Router();
@@ -16,6 +17,9 @@ router.route('/login').post(login);
 
 router.route('/publish').post(createBlog);
 router.route('/getBlog/:id').get(getBlog);
+
+router.route('/get-comments/:id').get(getComments);
+router.route('/add-comment').post(createComment);
 
 router.route('/upload').post( upload.single('image'), (req, res) => {res.json(req.file.path)});
 

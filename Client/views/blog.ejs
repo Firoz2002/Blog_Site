@@ -3,6 +3,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Document</title>
+        <script src="https://kit.fontawesome.com/5ef28b2280.js" crossorigin="anonymous"></script>
     </head>
 
     <style>
@@ -17,6 +18,51 @@
 
         #blog {
             position: relative;
+        }
+
+        #comments {
+            margin: 1rem;
+        }
+
+        .comment-box {
+            width: 300px;
+        }
+
+        .comment-box input, button {
+            margin: 10px 10px 0px 10px;
+        }
+
+        .comment-box textarea {
+            width: 100%;
+            margin: 10px 10px 0px 10px;
+            resize: none;
+        }
+
+        .user-comment {
+            margin: 10px;
+            padding: 5px;
+            width: 100%;
+            background: white;
+        }
+
+        .user-comment h5 {
+            padding: 10px;
+            max-width: 100px;
+            border: .1px solid black;
+            border-radius: 25px;
+        }
+
+        .user-comment p {
+            padding-left: 25px;
+        }
+
+        .user-profile {
+            font-size: 15px;
+            padding: 10px;
+        }
+
+        .user-profile a {
+            margin-left: 10px;
         }
 
         .container {
@@ -66,8 +112,8 @@
         }
 
         .publishedBy {
-            position: absolute;
-            right: 0;
+            position: relative;
+            right: 0%;
         }
 
         .publishedOn {
@@ -76,12 +122,19 @@
 
 
         @media(min-width: 300px) and (max-width: 700px) {
+            body {
+                margin: 0;
+            }
+
             #wrapper {
                 margin: 0%;
             }
 
             .container {
+                font-size: medium;
                 padding: 10%;
+                outline: 0;
+                outline-offset: 0;
             }
         }
 
@@ -108,28 +161,94 @@
                     <p class="publishedBy">--</p>
                 </div>
             </div>
+            <div id="comments">
+                <h3>Comments</h3>
+                <div class="comment-box">
+                    <input type="text" name="username" class="username" placeholder="Your name" required="required">
+                    <input type="email" name="email" class="userEmail" placeholder="Your email" required="required">
+                    <textarea name="comment" class="user-comment" rows="4" tabindex="20"  required="required"></textarea>
+                    <button class="submit">Submit</button>
+                </div>
+                <div class="comment-section">
+                    
+                </div>
+            </div>
         </div>
 
         <script>
+            const submit = document.querySelector('.submit');
+            const username = document.querySelector('.username');
+            const userEmail = document.querySelector('.userEmail');
+            const comment = document.querySelector('.user-comment');
+
             const blogId = decodeURI(location.pathname.split('/').pop());
             const url = (document.URL).replace("http://localhost:3000/blog/", "");
+
             document.addEventListener('DOMContentLoaded', async () => {
                 try {
-                    const res = await fetch(`/getBlog/blog?title=${url}`, {
+                    fetch(`/getBlog/blog?title=${url}`, {
                         method: "GET",
                         headers: {
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify()
-                    });
+                    })
+                    .then(res => res.json()) 
+                    .then((data) => {
+                        setupBlog(data);
 
-                    const data = await res.json();
-
-                    setupBlog(data);
+                        fetch(`/get-comments/${url}`, {
+                            method: "GET",
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify()
+                        })
+                        .then(res => res.json())
+                        .then((data) => {
+                            data.forEach(elem => {
+                                loadComments(elem);
+                            });
+                        })
+                    })
                 } catch (error) {
                     console.log(error)
                 }
             })
+
+            submit.addEventListener('click', () => {
+                fetch('/add-comment', {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: username.value,
+                        email: userEmail.value,
+                        blogTitle: url,
+                        content: comment.value,
+                    })
+                })
+                .then((res) => {
+                    if(res.status === 200) {
+                        location.reload();
+                    } else {
+                        alert("Some error occured")
+                    }
+                })
+            })
+
+            const loadComments = (data) => {
+                const div = document.createElement('div');
+                div.classList.add('user-comment');
+                div.innerHTML = `
+                    <div class="user-profile">
+                        <i class="fa-solid fa-circle-user"><a>${data.username}</a></i>
+                    </div>
+                    <p>${data.content}</p>
+                `
+                document.querySelector('.comment-section').appendChild(div);
+            }
 
             const setupBlog = (data) => {
                 const blogTitle = document.querySelector('.title');

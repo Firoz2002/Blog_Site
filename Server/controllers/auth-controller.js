@@ -7,7 +7,7 @@ const jwtSecret = process.env.SECRET;
 
 const register = async (req, res, next) => {
     const { username, password, email } = req.body;
-    console.log(username + password);
+    
     try {
         
         if(password.length < 6) {
@@ -106,7 +106,7 @@ const islogged = async (req, res, next) => {
             const decoded = jwt.verify(token, jwtSecret);
 
             const found = await User.findById(decoded.id);
-            
+
             if (found) {
                 return res.status(200).json({
                     islogged: true
