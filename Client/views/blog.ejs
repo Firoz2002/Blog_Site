@@ -191,12 +191,7 @@
             const comment = document.querySelector('.user-comment');
 
             const blogId = decodeURI(location.pathname.split('/').pop());
-<<<<<<< HEAD:Client/views/blog.ejs
-            const url = (document.URL).replace("http://localhost:3000/blog/", "");
-
-=======
             const url = (document.URL).replace("https://blog-site-k38f.onrender.com/blog/", "");
->>>>>>> ae036430e1e0242471b3c73a9f70cc651aab9636:views/blog.ejs
             document.addEventListener('DOMContentLoaded', async () => {
                 try {
                     fetch(`/getBlog/blog?title=${url}`, {
