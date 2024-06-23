@@ -9,8 +9,14 @@
 
 <div>
   <h2>In Action</h2>
-  <p>To see the application live</p>
-  <a href="https://blog-site-k38f.onrender.com">Click Me!</a>
+  <p>To see the application into action, go to</p>
+  <blockquote>
+
+  ```
+   $> blog-site-k38f.onrender.com
+  ```
+  
+  </blockquote>
 </div>
 <div>
   <h2>Getting Started</h2>
