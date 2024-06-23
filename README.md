@@ -112,6 +112,8 @@
     <li> Multer </li>
     <li> Mongoose </li>
     <li> Render </li>
+    <li> TinyMce </li>
+    <li> Cloudinary </li>
     <li> Freepik </li>
     <li> Cloudinary </li>
     <li> Font-Awesome </li>
